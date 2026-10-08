@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["server_origin", "estate", "tenant", "connector", "credential_ref", "entity_allowlist"],
+  "properties": {
+    "server_origin": {"type": "string", "pattern": "^https://[^/@?#]+/?$"},
+    "estate": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"},
+    "tenant": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"},
+    "connector": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_-]{0,63}$"},
+    "credential_ref": {"type": "string", "pattern": "^existing:[a-z0-9_-]{1,64}$"},
+    "entity_allowlist": {"type": "array", "minItems": 1, "maxItems": 1000, "uniqueItems": true, "items": {"type": "string", "maxLength": 128, "pattern": "^[a-z0-9_]+\\.[a-z0-9_]+$"}},
+    "heartbeat_seconds": {"type": "integer", "minimum": 15, "maximum": 300}
+  }
+}

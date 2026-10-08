@@ -1,0 +1,31 @@
+services:
+  n3xu5-ops-agent:
+    image: n3xu5-ops-agent:0.2.0-rc.2
+    build:
+      context: .
+      args:
+        BUILD_VERSION: 0.2.0-rc.2
+        BUILD_ARCH: ${N3XU5_BUILD_ARCH:-amd64}
+    user: "${N3XU5_UID:-1000}:${N3XU5_GID:-1000}"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    restart: "no"
+    mem_limit: 128m
+    cpus: 0.50
+    pids_limit: 32
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=16m"]
+    volumes:
+      - ./config/options.json:/config/options.json:ro
+      - ./state:/data:rw
+    secrets: [ops_session, ha_session]
+    networks: [ha]
+secrets:
+  ops_session:
+    file: ./secrets/ops-session
+  ha_session:
+    file: ./secrets/ha-session
+networks:
+  ha:
+    external: true
+    name: "${N3XU5_HA_NETWORK:?Set the existing dedicated estate HA Docker network}"

@@ -1,0 +1,14 @@
+{
+  "ha_origin": "http://homeassistant:8123",
+  "connector": {
+    "server_origin": "https://ops.your-tailnet.ts.net",
+    "estate": "your-estate",
+    "tenant": "your-tenant",
+    "connector": "your-connector",
+    "credential_ref": "existing:your-connector",
+    "entity_allowlist": [
+      "sensor.your_status"
+    ],
+    "heartbeat_seconds": 60
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "N3xu5 Ops Agent",
+  "version": "0.2.0-rc.2",
+  "slug": "n3xu5_ops_agent",
+  "description": "Outbound telemetry to N3xu5 Ops; fixed read-only HA routes",
+  "arch": [
+    "amd64",
+    "aarch64"
+  ],
+  "startup": "application",
+  "boot": "manual_only",
+  "homeassistant_api": true,
+  "hassio_api": false,
+  "host_network": false,
+  "full_access": false,
+  "apparmor": true,
+  "ports": {},
+  "options": {
+    "server_origin": "https://ops.your-tailnet.ts.net",
+    "estate": "your-estate",
+    "tenant": "your-tenant",
+    "connector": "your-connector",
+    "credential_ref": "existing:your-connector",
+    "entity_allowlist": [
+      "sensor.your_status"
+    ],
+    "heartbeat_seconds": 60
+  },
+  "schema": {
+    "server_origin": "url",
+    "estate": "str",
+    "tenant": "str",
+    "connector": "str",
+    "credential_ref": "str",
+    "entity_allowlist": [
+      "str"
+    ],
+    "heartbeat_seconds": "int(15,300)"
+  },
+  "url": "https://github.com/Darryl1987/ha-addons/tree/main/n3xu5_ops_agent"
+}

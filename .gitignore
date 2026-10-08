@@ -1,0 +1,7 @@
+**/__pycache__/
+**/*.pyc
+**/*.sqlite3*
+standalone/.env
+standalone/secrets/
+standalone/state/
+standalone/config/options.json
