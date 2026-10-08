@@ -12,7 +12,7 @@ import ipaddress
 from urllib.parse import urlsplit
 
 class ConnectorError(ValueError): pass
-VERSION='0.2.0-rc.2'
+VERSION='0.2.0-rc.3'
 
 @dataclass(frozen=True)
 class ConnectorConfig:
@@ -25,7 +25,7 @@ class ConnectorConfig:
     heartbeat_seconds: int=60
     def __post_init__(self):
         parsed=urlsplit(self.server_origin)
-        if parsed.scheme!='https' or not parsed.hostname or parsed.username or parsed.password or parsed.path not in ('','/') or parsed.query or parsed.fragment or parsed.port not in (None,443): raise ConnectorError('HTTPS origin required')
+        if parsed.scheme!='https' or not parsed.hostname or parsed.username or parsed.password or parsed.path not in ('','/') or parsed.query or parsed.fragment or parsed.port not in (None,443,8443): raise ConnectorError('HTTPS origin required')
         for value in (self.estate,self.tenant,self.connector):
             if not isinstance(value,str) or not re.fullmatch(r'[a-z0-9][a-z0-9_-]{0,63}',value): raise ConnectorError('invalid identity')
         if not re.fullmatch(r'existing:[a-z0-9_-]{1,64}',self.credential_ref): raise ConnectorError('existing credential reference required')
@@ -38,22 +38,22 @@ def tailnet_origin(origin):
     parsed=urlsplit(origin)
     if (parsed.scheme!='https' or not parsed.hostname or not parsed.hostname.endswith('.ts.net')
             or parsed.username or parsed.password or parsed.path not in ('','/')
-            or parsed.query or parsed.fragment or parsed.port not in (None,443)):
+            or parsed.query or parsed.fragment or parsed.port not in (None,443,8443)):
         raise ConnectorError('private Tailscale HTTPS origin required')
     return parsed.hostname
 
 class TailnetHTTPSConnection(http.client.HTTPSConnection):
     """Pin a verified tailnet address while preserving hostname TLS checks."""
     def connect(self):
-        hostname=tailnet_origin('https://'+self.host)
-        answers=socket.getaddrinfo(hostname,443,type=socket.SOCK_STREAM)
+        hostname=tailnet_origin('https://'+self.host+':'+str(self.port))
+        answers=socket.getaddrinfo(hostname,self.port,type=socket.SOCK_STREAM)
         allowed=(ipaddress.ip_network('100.64.0.0/10'),ipaddress.ip_network('fd7a:115c:a1e0::/48'))
         if not answers: raise ConnectorError('private Tailscale address unavailable')
         for answer in answers:
             address=ipaddress.ip_address(answer[4][0])
             if not any(address.version==network.version and address in network for network in allowed):
                 raise ConnectorError('non-Tailscale destination denied')
-        raw=socket.create_connection((answers[0][4][0],443),self.timeout)
+        raw=socket.create_connection((answers[0][4][0],self.port),self.timeout)
         try: self.sock=self._context.wrap_socket(raw,server_hostname=hostname)
         except Exception: raw.close();raise
 
@@ -67,7 +67,7 @@ class HttpsOpsTransport:
             if not isinstance(token,str) or not token or '\r' in token or '\n' in token: raise ConnectorError('existing credential unavailable')
             raw=json.dumps(payload,allow_nan=False).encode()
             if len(raw)>262144: raise ConnectorError('payload too large')
-            connection=TailnetHTTPSConnection(hostname,timeout=5,context=ssl.create_default_context())
+            connection=TailnetHTTPSConnection(hostname,port=urlsplit(self.config.server_origin).port or 443,timeout=5,context=ssl.create_default_context())
             connection.request('POST','/v1/connector/'+kind,body=raw,headers={'Authorization':'Bearer '+token,'Content-Type':'application/json'})
             response=connection.getresponse(); body=response.read(65537)
             if len(body)>65536: raise ConnectorError('oversized server response')

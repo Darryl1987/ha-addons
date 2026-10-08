@@ -1,5 +1,5 @@
 # N3xu5 Ops Agent
-Client-only release candidate **0.2.0-rc.2** for Home Assistant OS and Home Assistant
+Client-only release candidate **0.2.0-rc.3** for Home Assistant OS and Home Assistant
 Container. This repository contains the outbound agent, add-on metadata,
 Dockerfiles and Compose package. It contains no backend or operator sessions.
 
@@ -11,7 +11,7 @@ Repository URL: https://github.com/Darryl1987/ha-addons
 - **standalone/**: Docker/Compose client for Home Assistant Container.
 
 HA OS builds locally from the provided Dockerfile; no prebuilt registry image is
-advertised. Client metadata, Docker labels and heartbeat version are 0.2.0-rc.2.
+advertised. Client metadata, Docker labels and heartbeat version are 0.2.0-rc.3.
 Each package includes SHA-256 hashes for its shipped client modules.
 
 ## Enrollment prerequisites
@@ -38,3 +38,8 @@ is enforced in this client code, not a claim of a native read-only token scope.
 See [HA OS instructions](n3xu5_ops_agent/DOCS.md) and
 [Container instructions](standalone/README.md). Installing a release candidate
 requires your estate operator's approval and a stable HA installation.
+
+Private HTTPS ports 443 and 8443 are supported. Port 8443 allows an isolated
+client endpoint when 443 is already used. Other ports remain denied; TLS,
+Tailscale address checks and estate authentication are unchanged. Use only your
+operator-approved origin, including its port. Code-based enrollment is not implemented.

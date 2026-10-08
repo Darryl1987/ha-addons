@@ -1,6 +1,6 @@
 {
   "name": "N3xu5 Ops Agent",
-  "version": "0.2.0-rc.2",
+  "version": "0.2.0-rc.3",
   "slug": "n3xu5_ops_agent",
   "description": "Outbound telemetry to N3xu5 Ops; fixed read-only HA routes",
   "arch": [

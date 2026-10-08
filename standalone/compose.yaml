@@ -1,10 +1,10 @@
 services:
   n3xu5-ops-agent:
-    image: n3xu5-ops-agent:0.2.0-rc.2
+    image: n3xu5-ops-agent:0.2.0-rc.3
     build:
       context: .
       args:
-        BUILD_VERSION: 0.2.0-rc.2
+        BUILD_VERSION: 0.2.0-rc.3
         BUILD_ARCH: ${N3XU5_BUILD_ARCH:-amd64}
     user: "${N3XU5_UID:-1000}:${N3XU5_GID:-1000}"
     read_only: true

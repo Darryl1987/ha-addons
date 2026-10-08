@@ -1,7 +1,7 @@
 {
-  "version": "0.2.0-rc.2",
+  "version": "0.2.0-rc.3",
   "source_sha256": {
-    "connector.py": "4bc2db1e9eb6334bedc121db1038363aca56d748d99c4f65ce30a9114efe65ea",
+    "connector.py": "1c2e2ead0caf60b626ad463cfbbed44a261a2c00bcd4b20321317ab86afdf9d0",
     "client_main.py": "7fe9f4e2ad4c124e5e59e06046a425d822451b2bee95f7cf664793c21bea2755"
   }
 }

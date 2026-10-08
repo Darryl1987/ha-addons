@@ -19,7 +19,7 @@ amd64. Container-only HA installations use the standalone package instead.
 In Settings -> Apps/Add-ons -> Store -> repositories, add:
 https://github.com/Darryl1987/ha-addons
 
-Select N3xu5 Ops Agent 0.2.0-rc.2. Review and approve homeassistant_api before
+Select N3xu5 Ops Agent 0.2.0-rc.3. Review and approve homeassistant_api before
 installation. It exposes the HA REST proxy using Supervisor's runtime token;
 Supervisor does not provide a native read-only scope. This client uses only
 GET /core/api/config and GET /core/api/states/<allowlisted entity>.
